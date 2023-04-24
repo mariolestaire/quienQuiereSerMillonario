@@ -101,6 +101,7 @@
 
     let currentQuestionIndex = 0;
     let currentPrize = 0;
+    let attempts = 2;
 
     function displayQuestion(index) {
         const question = questions[index];
@@ -114,6 +115,14 @@
         document.getElementById("score").innerText = `Puntuación: ${currentPrize}€`;
     }
 
+    function restartGame() {
+        currentQuestionIndex = 0;
+        currentPrize = 0;
+        attempts = 2;
+        updateScore();
+        displayQuestion(currentQuestionIndex);
+    }
+
     function checkAnswer(selectedOption) {
         const question = questions[currentQuestionIndex];
         if (selectedOption === question.answer) {
@@ -121,13 +130,20 @@
             currentPrize = prizeValues[currentQuestionIndex];
             updateScore();
             currentQuestionIndex++;
+            attempts = 2; // Restablecer intentos cuando se responde correctamente
             if (currentQuestionIndex < questions.length) {
                 displayQuestion(currentQuestionIndex);
             } else {
                 alert("¡Felicidades! Has ganado 1 millón de euros.");
             }
         } else {
-            alert("Incorrecto. Inténtalo de nuevo.");
+            attempts--;
+            if (attempts > 0) {
+                alert(`Incorrecto. Te quedan ${attempts} intentos.`);
+            } else {
+                alert("Has agotado tus intentos. El juego ha terminado.");
+                restartGame();
+            }
         }
     }
 
