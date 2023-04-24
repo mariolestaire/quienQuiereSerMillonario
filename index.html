@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quién quiere ser millonario?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #2a2a2a;
+            color: #ffffff;
+        }
+        .question-container {
+            margin-top: 50px;
+        }
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0069d9;
+        }
+    </style>
+</head>
+<body>
+    <h1>¿Quién quiere ser millonario?</h1>
+    <div class="question-container">
+        <h2 id="question">Pregunta</h2>
+        <button id="option1" onclick="checkAnswer(1)">Opción 1</button>
+        <button id="option2" onclick="checkAnswer(2)">Opción 2</button><br>
+        <button id="option3" onclick="checkAnswer(3)">Opción 3</button>
+        <button id="option4" onclick="checkAnswer(4)">Opción 4</button>
+    </div>
+    <h3 id="score">Puntuación: 0€</h3>
+
+    <script>
+        const questions = [
+    {
+        question: "1 ¿Cuál es la capital de España?",
+        options: ["Madrid", "Barcelona", "Sevilla", "Valencia"],
+        answer: 1,
+    },
+    {
+        question: "2 ¿Cuál es el elemento químico más abundante en la atmósfera terrestre?",
+        options: ["Oxígeno", "Hidrógeno", "Nitrógeno", "Carbono"],
+        answer: 3,
+    },
+    {
+        question: "3 ¿Cuál es el río más largo del mundo?",
+        options: ["Nilo", "Amazonas", "Misisipi", "Yangtsé"],
+        answer: 2,
+    },
+    {
+        question: "4 ¿Cuál es el país más poblado del mundo?",
+        options: ["China", "India", "Estados Unidos", "Indonesia"],
+        answer: 2,
+    },
+    {
+        question: "5 ¿En qué año se fundó la Organización de las Naciones Unidas?",
+        options: ["1945", "1950", "1955", "1960"],
+        answer: 1,
+    },
+    {
+        question: "6 ¿Cuál es el planeta más cercano al Sol?",
+        options: ["Venus", "Marte", "Mercurio", "Júpiter"],
+        answer: 3,
+    },
+    {
+        question: "7 ¿Quién es el autor de la obra 'Don Quijote de la Mancha'?",
+        options: ["William Shakespeare", "Miguel de Cervantes", "Dante Alighieri", "Franz Kafka"],
+        answer: 2,
+    },
+    {
+        question: "8 ¿Cuál es el idioma más hablado en el mundo?",
+        options: ["Inglés", "Mandarín", "Español", "Hindi"],
+        answer: 2,
+    },
+    {
+        question: "9 ¿Qué elemento químico tiene el símbolo 'O'?",
+        options: ["Oro", "Osmio", "Oxígeno", "Oropimente"],
+        answer: 3,
+    },
+    {
+        question: "10 ¿Cuál es la moneda oficial de Japón?",
+        options: ["Yen", "Won", "Dólar", "Euro"],
+        answer: 1,
+    },
+   
+
+    // ... Agrega más preguntas aquí
+    ];
+
+    const prizeValues = [
+        100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000
+    ];
+
+    let currentQuestionIndex = 0;
+    let currentPrize = 0;
+
+    function displayQuestion(index) {
+        const question = questions[index];
+        document.getElementById("question").innerText = question.question;
+        for (let i = 0; i < 4; i++) {
+            document.getElementById("option" + (i + 1)).innerText = question.options[i];
+        }
+    }
+
+    function updateScore() {
+        document.getElementById("score").innerText = `Puntuación: ${currentPrize}€`;
+    }
+
+    function checkAnswer(selectedOption) {
+        const question = questions[currentQuestionIndex];
+        if (selectedOption === question.answer) {
+            alert("¡Correcto!");
+            currentPrize = prizeValues[currentQuestionIndex];
+            updateScore();
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion(currentQuestionIndex);
+            } else {
+                alert("¡Felicidades! Has ganado 1 millón de euros.");
+            }
+        } else {
+            alert("Incorrecto. Inténtalo de nuevo.");
+        }
+    }
+
+    displayQuestion(currentQuestionIndex);
+
+</script>
+</body>
+</html>
