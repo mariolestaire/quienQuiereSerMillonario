@@ -4,41 +4,132 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¿Quién quiere ser millonario?</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             text-align: center;
-            background-color: #2a2a2a;
+            background-color: #1e1e1e;
             color: #ffffff;
+            margin: 0;
+            padding: 0;
         }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: #2c3e50;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-weight: 400;
+            font-size: 28px;
+            color: #ecf0f1;
+        }
+
         .question-container {
             margin-top: 50px;
+            padding: 30px 0;
+            background-color: #34495e;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+        .question {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 25px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
         button {
-            background-color: #007bff;
+            background-color: #e67e22;
             color: #ffffff;
             border: none;
-            padding: 10px 20px;
+            padding: 15px 30px;
             margin: 5px;
+            font-size: 18px;
+            border-radius: 5px;
             cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
         }
+
         button:hover {
-            background-color: #0069d9;
+            background-color: #d35400;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            padding: 20px 0;
+            color: #ecf0f1;
+            font-size: 14px;
+            margin-top: 50px;
+        }
+        
+        .prizes-list li.current {
+            font-weight: bold;
+            color: #e67e22;
+        }
+
+        #phone-a-friend {
+            background-color: #3498db;
+            transition: background-color 0.3s ease;
+        }
+    
+        #phone-a-friend.used {
+            background-color: #e74c3c;
+        }
+
+        #ask-a-relative {
+            background-color: #9b59b6;
+            transition: background-color 0.3s ease;
+        }
+
+        #ask-a-relative.used {
+            background-color: #e74c3c;
         }
     </style>
 </head>
 <body>
     <h1>¿Quién quiere ser millonario?</h1>
-    <div class="question-container">
-        <h2 id="question">Pregunta</h2>
-        <button id="option1" onclick="checkAnswer(1)">Opción 1</button>
-        <button id="option2" onclick="checkAnswer(2)">Opción 2</button><br>
-        <button id="option3" onclick="checkAnswer(3)">Opción 3</button>
-        <button id="option4" onclick="checkAnswer(4)">Opción 4</button>
+    <div class="container">
+        <div class="question-container">
+            <h2 id="question">Pregunta</h2>
+            <div class="options">
+                <button id="option1" onclick="checkAnswer(1)">Opción 1</button>
+                <button id="option2" onclick="checkAnswer(2)">Opción 2</button>
+                <button id="option3" onclick="checkAnswer(3)">Opción 3</button>
+                <button id="option4" onclick="checkAnswer(4)">Opción 4</button>
+            </div>
+        </div>
+        <div id="prizes">
+            <!-- Los premios se generarán automáticamente aquí -->
+        </div>
+        <button id="phone-a-friend" onclick="phoneAFriend()">Llamada al público</button>
+        <button id="ask-a-relative" onclick="askARelative()">Pregunta a un familiar</button>
+
+        
     </div>
+    <footer>
+        <p>&copy; 2023 ¿Quién quiere ser millonario? - Todos los derechos reservados</p>
+    </footer>
     <h3 id="score">Puntuación: 0€</h3>
 
     <script>
+        //PREGUNTAS
         const questions = [
     {
         question: "1 ¿Cuál es la capital de España?",
@@ -102,6 +193,40 @@
     let currentQuestionIndex = 0;
     let currentPrize = 0;
     let attempts = 2;
+    let phoneUsed = false;
+    let relativeUsed = false;
+
+
+    function phoneAFriend() {
+         if (!phoneUsed) {
+        const question = questions[currentQuestionIndex];
+        const correctOption = question.answer;
+        alert("La respuesta correcta es la opción " + correctOption);
+        phoneUsed = true;
+        document.getElementById("phone-a-friend").disabled = true;
+        document.getElementById("phone-a-friend").classList.add("used");
+        } else {
+            alert("Ya has usado la llamada al público.");
+        }
+    }
+    function askARelative() {
+        if (!relativeUsed) {
+            const question = questions[currentQuestionIndex];
+            const correctOption = question.answer;
+            let incorrectOption;
+
+            do {
+                incorrectOption = Math.floor(Math.random() * 4) + 1;
+            } while (incorrectOption === correctOption);
+
+            alert("Un familiar te sugiere las opciones " + correctOption + " y " + incorrectOption);
+            relativeUsed = true;
+            document.getElementById("ask-a-relative").disabled = true;
+            document.getElementById("ask-a-relative").classList.add("used");
+        } else {
+            alert("Ya has preguntado a un familiar.");
+        }
+    }
 
     function displayQuestion(index) {
         const question = questions[index];
@@ -112,7 +237,26 @@
     }
 
     function updateScore() {
+        /*const prizeElements = document.getElementsByClassName("prize");
+        for (let i = 0; i < prizeElements.length; i++) {
+            prizeElements[i].classList.remove("current");
+        }
+        if (currentQuestionIndex < prizeValues.length) {
+           //prizeElements[currentQuestionIndex].classList.add("current");
+           prizeElements[currentQuestionIndex - 1].classList.add("current");
+        }
         document.getElementById("score").innerText = `Puntuación: ${currentPrize}€`;
+        */
+        const prizeElements = document.getElementsByClassName("prize");
+        for (let i = 0; i < prizeElements.length; i++) {
+            prizeElements[i].classList.remove("current");
+        }
+        if (currentQuestionIndex < prizeValues.length) {
+            prizeElements[currentQuestionIndex].classList.add("current");
+        }
+        document.getElementById("score").innerText = `Puntuación: ${currentPrize}€`;
+
+
     }
 
     function restartGame() {
@@ -135,6 +279,7 @@
                 displayQuestion(currentQuestionIndex);
             } else {
                 alert("¡Felicidades! Has ganado 1 millón de euros.");
+                restartGame();
             }
         } else {
             attempts--;
@@ -146,8 +291,19 @@
             }
         }
     }
+    function displayPrizes() {
+        const prizesContainer = document.getElementById("prizes");
+        let prizesHTML = '<ul class="prizes-list">';
+        for (let i = 0; i < prizeValues.length; i++) {
+            prizesHTML += `<li class="prize" id="prize${i}">${prizeValues[i]}€</li>`;
+        }
+        prizesHTML += "</ul>";
+        prizesContainer.innerHTML = prizesHTML;
+        updateScore();
+    }
 
     displayQuestion(currentQuestionIndex);
+    displayPrizes();
 
 </script>
 </body>
